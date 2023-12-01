@@ -4,9 +4,15 @@ namespace AdventOfCode2023
 { 
     internal class Program
     {
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var input = File.ReadLines("C:\\Users\\Kacper1\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\input.txt");
+
+            foreach (string line in input)
+            {
+                Console.WriteLine(line);
+            }
         }
 
 
@@ -29,9 +35,10 @@ namespace AdventOfCode2023
         {
 
             var input = File.ReadLines("FILENAME");
+            
             foreach(string line in input)
             {
-                //CODE
+               
             }
         }
     }
