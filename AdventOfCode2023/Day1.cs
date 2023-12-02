@@ -8,7 +8,7 @@ namespace AdventOfCode2023
 {
     internal class Day1
     {
-        static void day1p1(string[] args)
+        static void day1p2(string[] args)
         {
             Dictionary<string, int> map = new Dictionary<string, int>()
             {
@@ -93,7 +93,7 @@ namespace AdventOfCode2023
             }
             Console.WriteLine(sum);
         }
-        static void day2p2(string[] args)
+        static void day1p1(string[] args)
         {
             int first_digit = 0;
             int last_digit = 0;
