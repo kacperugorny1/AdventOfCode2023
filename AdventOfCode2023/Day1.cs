@@ -8,7 +8,7 @@ namespace AdventOfCode2023
 {
     internal class Day1
     {
-        static void Func(string[] args)
+        static void day1p1(string[] args)
         {
             Dictionary<string, int> map = new Dictionary<string, int>()
             {
@@ -80,6 +80,41 @@ namespace AdventOfCode2023
                                 last_digit = map[num.Substring(num.Length - 5)];
                             digits++;
                         }
+                    }
+
+                }
+                if (digits == 1)
+                    last_digit = first_digit;
+                sum += first_digit * 10 + last_digit;
+                Console.WriteLine(first_digit * 10 + last_digit);
+                first_digit = 0;
+                last_digit = 0;
+                digits = 0;
+            }
+            Console.WriteLine(sum);
+        }
+        static void day2p2(string[] args)
+        {
+            int first_digit = 0;
+            int last_digit = 0;
+            int digits = 0;
+            long sum = 0;
+            string? line = "";
+            while (true)
+            {
+                line = Console.ReadLine();
+                if (line == "" || line == null || line == "\n")
+                    break;
+
+                foreach (char c in line)
+                {
+                    if (c - 48 >= 0 && c - '0' <= 9)
+                    {
+                        digits++;
+                        if (first_digit == 0)
+                            first_digit = c - '0';
+                        else
+                            last_digit = c - '0';
                     }
 
                 }
