@@ -50,5 +50,45 @@ namespace AdventOfCode2023
             stopwatch.Stop();
             Console.WriteLine($"Elapsed time is {stopwatch.ElapsedMilliseconds} ms");
         }
+        static void day6p2(string[] args)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            var input = File.ReadLines("C:\\Users\\Kacper1\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\input.txt");
+            //input = File.ReadLines("C:\\Users\\Kacper1\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\inputtest.txt");
+            long time = 0;
+            long dist = 0;
+            long result = 0;
+            int lineno = 0;
+            stopwatch.Start();
+            foreach (string line in input)
+            {
+                for (int i = 0; i < line.Length; i++)
+                {
+                    int j = i;
+                    if (!char.IsDigit(line[i])) continue;
+                    if (lineno == 0)
+                    {
+                        time *= 10;
+                        time += line[i] - '0';
+                    }
+                    else
+                    {
+                        dist *= 10;
+                        dist += line[i] - '0';
+                    }
+                }
+                lineno++;
+            }
+
+            for (long j = 0; j < time; j++)
+            {
+                long dist_now = j * (time - j);
+                if (dist_now > dist) result++;
+            }
+
+            Console.WriteLine(result);
+            stopwatch.Stop();
+            Console.WriteLine($"Elapsed time is {stopwatch.ElapsedMilliseconds} ms");
+        }
     }
 }
