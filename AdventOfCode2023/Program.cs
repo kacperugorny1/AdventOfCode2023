@@ -12,77 +12,41 @@ namespace AdventOfCode2023
         {
             Stopwatch stopwatch = new Stopwatch();
             var input = File.ReadLines("C:\\Users\\Kacper1\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\input.txt");
-            //input = File.ReadLines("C:\\Users\\Kacper1\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\inputtest.txt");
-            int i = 0;
-            List<(long,long)> seedsRanges = new();
-            List<(long,long,long)> mapping = new();
-            string[] parts;
+            input = File.ReadLines("C:\\Users\\Kacper1\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\inputtest.txt");
+            List<int> times = new List<int>();
+            List<int> dist = new();
+            int result = 1;
+            int lineno = 0;
             stopwatch.Start();
             foreach (string line in input)
-            {
-                if (line == "") 
+            {      
+                for(int i = 0; i < line.Length; i++)
                 {
-                    
-                    for (int j = 0; j < seedsRanges.Count; ++j)
-                    {
-                        var map = mapping.Find(u =>
-                        {
-                            return !(seedsRanges[j].Item1 >= u.Item2+u.Item1 || seedsRanges[j].Item2 < u.Item1);
-                        });
-                        if (map.Item1 == 0 && map.Item2 == 0 && map.Item3 == 0)
-                            continue;
-                        if (seedsRanges[j].Item1 < map.Item1)
-                        {
-                            seedsRanges.Add((seedsRanges[j].Item1, map.Item1 - 1));
-                            if (seedsRanges[j].Item2 >= map.Item2 + map.Item1)
-                            {
-                                seedsRanges.Add((map.Item2 + map.Item1, seedsRanges[j].Item2));
-                                seedsRanges[j] = (map.Item3, map.Item2 + map.Item3 - 1);
-                            }
-                            else seedsRanges[j] = (map.Item3, map.Item3 + seedsRanges[j].Item2 - map.Item1);
-                        }
-                        else
-                        {
-                            if (seedsRanges[j].Item2 >= map.Item2 + map.Item1)
-                            {
-                                seedsRanges.Add((map.Item2 + map.Item1, seedsRanges[j].Item2));
-                                seedsRanges[j] = (map.Item3 + seedsRanges[j].Item1 - map.Item1, map.Item2 + map.Item3 - 1);
-                            }
-                            else seedsRanges[j] = (map.Item3 + seedsRanges[j].Item1 - map.Item1,map.Item3 + seedsRanges[j].Item2 - map.Item1 );
-                        }
-                    }
-                    i++;
-                    mapping = new();
-                    continue;
-                }
-                if (i == 0)
-                {
-                    parts = line.Split(":").Last().Substring(1).Split(" ");
-                    for (int k = 0; k < parts.Length; k+=2)
-                    {
-                        seedsRanges.Add((long.Parse(parts[k]), long.Parse(parts[k + 1]) + long.Parse(parts[k]) - 1));
-                    } 
-                    //foreach (string part in parts)
-                    //    seeds.Add((long.Parse(part), new List<long>()));
-                    continue;
-                }
-                if (char.IsLetter(line[0])) continue;
+                    int j = i;
+                    if (!char.IsDigit(line[i]))
+                        continue;
+                    while (j < line.Length - 1 && char.IsDigit(line[j + 1])) j++;
+                    if(lineno == 0)
+                        times.Add(int.Parse(line.Substring(i, j - i + 1)));
+                    else
+                        dist.Add(int.Parse(line.Substring(i, j - i + 1)));
+                    i = j + 1;
 
-                parts = line.Split(" ");
-                long destination = long.Parse(parts[0]);
-                long source = long.Parse(parts[1]);
-                long len = long.Parse(parts[2]);
-                mapping.Add((source, len, destination));
-                
-
+                }
+                lineno++;
             }
-            long min = Int32.MaxValue;
-            foreach(var x in seedsRanges)
+            for(int i = 0; i < times.Count; i++)
             {
-                min = x.Item1 < min ? x.Item1 : min;
+                int sum = 0;
+                for(int j = 0; j < times[i]; j++)
+                {
+                    int dist_now = j * (times[i] - j);
+                    if (dist_now > dist[i]) sum++;
+                }
+                result*=sum;
             }
+            Console.WriteLine(result);
             stopwatch.Stop();
-            Console.WriteLine(min);
             Console.WriteLine($"Elapsed time is {stopwatch.ElapsedMilliseconds} ms");
         }
     }
