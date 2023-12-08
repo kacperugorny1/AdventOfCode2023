@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
 
 namespace AdventOfCode2023
 {
-    //https://topaz.github.io/paste/#XQAAAQCvCQAAAAAAAAA6nMlWi076alCx9N1TsRv/nE/5+HEJqrfgdiKbnpiCU30HOqctQj7Jp3T1Xt0zuyBzJjB+ise8j8R3bmPwIDTyo8c++CYGfLfshnb0jcBhyL/6GbQ1a8Qtge1cQaPvZR3+xe3RZDpCKCOWiFPJPImoJaIv3pnwNtjg2obpk/dPK02M9A2hxkZd/N5weImKnXk5rvmjdEgOMfaRpJas/b+kM41Xpp7e/43hP/fTVinr/M3K2Kq8Gz0k43OrCba4eaSxjWl4lqI9Z58GkRGp+zttskYw5R707lpxp1bpHIKRYc5WoPlZp6pzW5zfyjTuDZ5oDMyvcve1HW2mTqtjVbh49A0soaVCTXNB343GcmTi4R81Zs09idT7fxw5EpuVztX7rgEUJK8z172X4cMvaNfoDmoADuXK0qHUFpxP8lmZjL/JRY+zyPto6KsCnOvRvuC8N7C4YjJDW3EfWy44sIEcbIuD1C1tDGXCHL+Z6xIoedxLAZ9BaEYTUHhgyoQBvfJtNt7N2VbhmIpFoMxe3Ir+YHPwWaLT/YpJHsJz2/B3/+OcwJ9eUF/8qXWIjRM8abM3HjM5Rx/vDalZoJQ0zRBu4vRYwhWIwUIH5mgRHVrVsMWambDbsmKfhFeJ+TUsMqY6AI2p4l6OsRG+4om2ccJ7V4SJXykFXOOfB4iazn9U02VWUiV1Ac+mnovRunLCMuN6KHITD0mH18+x7Le5r9Wv7kBO+KDGMIxowVAinxfdfeNgamFzGOFR/BEd89OmXr6ftGokpHfg7YiCaC/ISuidD+eBrdRs+db4xu2d/9sIlWR1jDcygVHCauYDFKo8lGgbYjOTVqaFG7XSylOc3UaZi6DUWB4OcUyEC59Eraugm5tYK2ih2FqaS9s38BI7vbQmJkWJ6qOPtTVO0nSK+sOTxAiVJBsGhqewUDlcgKtf2exY8c82uwaQNYokFQQsKSXuD+AYZFYw3ckTbonYYHz5OzHyWyIICFHNpT+NN65GVryDnvJDGrYkSrA1rlswD030o2k3KBGBv/shGUmO5QI45EXeRWZDJIdb8hmsk7u+SAQgcGr5+HzRivsOD/0DjSX4xaP/yXMGgA==
     internal class Program
     {
         // Helpful stuff : Convert.ToInt(), Int32.Parse/TryParse, var val = x switch { 'a' => 2, blbl}, char - '0' = numvalue
@@ -14,11 +15,83 @@ namespace AdventOfCode2023
             var input = File.ReadLines("C:\\Users\\Kacper1\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\input.txt");
             //input = File.ReadLines("C:\\Users\\Kacper1\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\inputtest.txt");
             long result = 0;
+            List<(string place, string left, string right, int id)> paths = new();
+            List<int> locations = new();
+            List<(long len, long rep)> reps = new();
+            List<(long result, int location)> historyZ = new();
+            string nav = "";
             stopwatch.Start();
             foreach (string line in input)
             {
-                
+                if (line.Length == 0) continue;
+                if (line.Length != 16)
+                {
+                    nav = line;
+                    continue;
+                }
+                if (line[2] == 'A')
+                {
+                    locations.Add(paths.Count());
+                    historyZ.Add(new());
+                    reps.Add((0,0));
+                }
+                paths.Add((line.Substring(0, 3), line.Substring(7, 3), line.Substring(12, 3), paths.Count));
             }
+            while (true)
+            {
+                result++;
+                char n = nav[0];
+                nav = nav.Substring(1) + n;
+                for(int i = 0; i < locations.Count(); ++i)
+                {
+                    locations[i] = paths.Find(u =>
+                    {
+                        if (n == 'R') return u.place == paths[locations[i]].right;
+                        else return u.place == paths[locations[i]].left;
+                    }).id;
+                    if (paths[locations[i]].place[2] == 'Z')
+                    {
+                        if (historyZ[i].result == 0)
+                        {
+                            historyZ[i]=(result, locations[i]);
+                        }
+                        else
+                        {
+                            if (reps[i].len == 0)
+                            {
+
+                                Console.WriteLine(result + " " + i);
+                                Console.WriteLine(locations[i]);
+                                if ( historyZ[i].location == locations[i])
+                                {
+                                    reps[i] = (historyZ[i].result, result - historyZ[i].result);
+                                    //Console.WriteLine(result);
+                                }
+                            }
+                        }
+
+                    }
+                }
+                if (!reps.Exists(u => u.len == 0)) break;
+            }
+            Console.WriteLine("hello");
+            List<long> len = new(new long[reps.Count]);
+            for (int i = 0; i < reps.Count; i++)
+            {
+                len[i] += reps[i].len;
+                Console.WriteLine(len[i]);
+                Console.WriteLine(reps[i].rep);
+            }
+            while (true)
+            {
+                for(int i = 0; i < reps.Count; i++)
+                {
+                    if (len[i] < len.Max())
+                     len[i] += reps[i].rep;
+                }
+                if (len.All(x => x == len[0])) break;
+            }
+            result = len[0];
             Console.WriteLine($"Result = {result}");
             Console.WriteLine($"Elapsed time is {stopwatch.ElapsedMilliseconds} ms");
         }
