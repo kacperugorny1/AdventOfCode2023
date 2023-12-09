@@ -18,28 +18,7 @@ namespace AdventOfCode2023
             stopwatch.Start();
             foreach (string line in input)
             {
-                List<List<int>> hist = new();
-                hist.Add(line.Split(" ").ToList().ConvertAll(x => Int32.Parse(x)));
-                hist.Last().ForEach(u => Console.Write(u + " "));
-                Console.WriteLine();
-                while (true)
-                {
-                    hist.Add(new());
-                    for (int i = 0; i < hist[^2].Count() - 1;++i)
-                    {
-                        hist.Last().Add(hist[^2][i + 1] - hist[^2][i]);
-                        Console.Write(hist.Last().Last() + " ");
-                    }
-                    Console.WriteLine();
-                    if (hist.Last().All(u => u == 0)) break;
-                }
-                hist.Last().Add(0);
-                for(int i = hist.Count() - 2; i >= 0; --i)
-                {
-                    hist[i].Add(hist[i + 1].Last() + hist[i].Last());
-                }
-                result += hist[0].Last();
-
+      
             }
 
 

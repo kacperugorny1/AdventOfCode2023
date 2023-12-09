@@ -20,17 +20,13 @@ namespace AdventOfCode2023
             {
                 List<List<int>> hist = new();
                 hist.Add(line.Split(" ").ToList().ConvertAll(x => Int32.Parse(x)));
-                hist.Last().ForEach(u => Console.Write(u + " "));
-                Console.WriteLine();
                 while (true)
                 {
                     hist.Add(new());
                     for (int i = 0; i < hist[^2].Count() - 1; ++i)
                     {
                         hist.Last().Add(hist[^2][i + 1] - hist[^2][i]);
-                        Console.Write(hist.Last().Last() + " ");
                     }
-                    Console.WriteLine();
                     if (hist.Last().All(u => u == 0)) break;
                 }
                 hist.Last().Add(0);
@@ -42,6 +38,40 @@ namespace AdventOfCode2023
 
             }
 
+
+            stopwatch.Stop();
+            Console.WriteLine($"Result = {result}");
+            Console.WriteLine($"Elapsed time is {stopwatch.ElapsedMilliseconds} ms");
+        }
+        static void day9p2(string[] args)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            var input = File.ReadLines("C:\\Users\\Kacpi\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\input.txt");
+            //input = File.ReadLines("C:\\Users\\Kacpi\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\inputtest.txt");
+            long result = 0;
+            stopwatch.Start();
+            foreach (string line in input)
+            {
+                List<List<int>> hist = new();
+                hist.Add(line.Split(" ").ToList().ConvertAll(x => Int32.Parse(x)));
+
+                while (true)
+                {
+                    hist.Add(new());
+                    for (int i = 0; i < hist[^2].Count() - 1; ++i)
+                    {
+                        hist.Last().Add(hist[^2][i + 1] - hist[^2][i]);
+                    }
+                    if (hist.Last().All(u => u == 0)) break;
+                }
+                hist.Last().Insert(0, 0);
+                for (int i = hist.Count() - 2; i >= 0; --i)
+                {
+                    hist[i].Insert(0, hist[i].First() - hist[i + 1].First());
+                }
+                result += hist[0].First();
+
+            }
 
             stopwatch.Stop();
             Console.WriteLine($"Result = {result}");
