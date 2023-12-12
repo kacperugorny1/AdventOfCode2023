@@ -12,19 +12,26 @@ namespace AdventOfCode2023
         static void Main(string[] args)
         {
             Stopwatch stopwatch = new Stopwatch();
-            var input = File.ReadLines("C:\\Users\\Kacpi\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\input.txt");
-            //input = File.ReadLines("C:\\Users\\Kacpi\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\inputtest.txt");
+            var input = File.ReadLines("C:\\Users\\Kacper1\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\input.txt");
+            //input = File.ReadLines("C:\\Users\\Kacper1\\Desktop\\c#\\AdventOfCode2023\\AdventOfCode2023\\inputtest.txt");
             long result = 0;
+
+
             stopwatch.Start();
+
             foreach (string line in input)
             {
+
             }
-           
+
+
+
             stopwatch.Stop();
             Console.WriteLine($"Result = {result}");
             Console.WriteLine($"Elapsed time is {stopwatch.ElapsedMilliseconds} ms");
 
         }
+
 
     }
 }
